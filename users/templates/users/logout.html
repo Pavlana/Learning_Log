@@ -1,0 +1,16 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  
+  {% if user.is_authenticated %}
+    Hello, {{ user.username }}.
+    <a href="{% url 'users:logout' %}">log out</a>
+
+  {% else %}
+    <a href="{% url 'users:login' %}">log in</a>
+  
+  {% endif %}
+
+</p>
+
+{% endblock content %}

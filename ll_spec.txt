@@ -1,0 +1,78 @@
+server port : http://127.0.0.1:8001/
+
+project: learning_log
+
+admin: ll_admin
+pass: port8001
+
+
+We will write a web app called Learining Log that allows users to log the topics they are interested in and to make journal entries as they learned about each topic. 
+
+The learning Log home page should describe the site and invite users to either register or log in. Once logged in, a user should be able to create new topics, add new entries and read and edit existing entires. 
+
+Model representation:
+models.CharField(max_length=200) - (for a text title) use CharField when you want to store a small data text : a name, a title, a city. We have to tell Django how much space it should reserve in the database. Here we give it a max_length of 200 characters, which should be enough to hold most topic names. 
+
+data_added = models.DataTimeField(auto_add_now=True) - a piece of data that will record a date and a time. Auto_add_now=True tells Django automatically set this attribute to the current data and time whenever the user creates a new topic. 
+
+admin_user password: 
+creating an admin user: python manage.py createsuperuser
+open admin.py that file was automatically created by Django in the same directory as midels.py 
+
+register Topic with the admin site (from learning_logs.models import Topic
+									admin.site.register(Topic))
+open http://localhost:8001/admin/ This page allows you to add new users and groups and change existing ones. We can also work with data related to the Topic model that we just defined. 
+
+To record what we’ve been learning we need to define a model for the kinds of entries (which need to be associated with a particulaer topic) users can make in their learning logs.
+
+A foreign key is a database term; it’s a reference to another record in the database.When Django needs to establish a connection between two pieces of data, it uses the key associated with each piece of information.
+
+We nest the Meta class inside our Entry class. Meta holds extra information for managing a model;here allowing Django to print 'Entries' instead of 'Entrys' as a refer to multiply entries.  
+
+__str__() tells Dj which infromation to show when it refers to individual entries. [:50] means to show the first 50 chars of text.  We also add an ellipsis ("...") to clarify that we're not always displaying the entire entry. 
+
+As we have added a new model we need to migrate a database again and check the output. 
+
+Register a new model with the Admin Site. 
+
+Examine entered data programmatically using:
+python manage.py shell
+>>> from learning_logs.models import Topic
+>>> Topic.objects.all() // <- QuerySet is a list of all instances of the model Topic //
+
+you can for loop a list to display each topic and its ID. 
+
+store queryset in topics and then print each topic's ID attribute ('1', '2' etc) and the string representation ("Django Project", "Data Visua;isation")
+
+topics = Topic.object.all()
+for topic in topics:
+	print(topic.id, topic)
+...
+1 Django project
+2 Data Visualisation
+
+If you know the ID of a particular object, you can get that object and examine any attribute the object has.
+
+>>> t = Topic.objects.get(id=1)
+>>> t.text
+'Django project'
+>>> t.date_added
+datetime.datetime(2019, 5, 5, 11, 17, 29, 567362, tzinfo=<UTC>)
+
+Django can use the connection ForeignKey() to get every entry related to a certain topic,
+
+
+>>> t.entry_set.all()
+<QuerySet [<Entry: Here you’ll see the benefit of using text[:50] as ...>, <Entry: Now that we’ve entered some data, we can examine t...>]>
+____
+
+Map the base URL to Learning Log's home page: open urls.py 
+Make a second urls.py file in the learning_logs folder
+
+A view function takes in information from a request, prepares the data needed to generate a page, and then sends the data back to the browser, often by using a template that defines what the page will look like.
+
+A template sets up the structure for a web page. The template defines what the page should look like, and Django fills in the relevant data each time the page is requested. A template allows you to access any data provided by the view.
+
+
+
+
